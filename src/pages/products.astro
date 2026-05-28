@@ -1,0 +1,244 @@
+---
+// 1. Fetch your product inventory data automatically
+import products from '../data/products.json';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products — SONOVA</title>
+  
+  <script src="https://cdn.tailwindcss.com" is:inline></script>
+  <script src="https://unpkg.com/lucide@latest" is:inline></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght=800&display=swap" rel="stylesheet">
+  
+  <script is:inline>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body: ['Space Grotesk', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-body text-xs">
+  <div id="warp-bubble-overlay"></div>
+  <canvas id="galaxy-bg"></canvas>
+
+  <nav class="fixed top-0 left-0 w-full px-6 md:px-10 py-4 flex justify-between items-center z-50 bg-black/10 backdrop-blur-sm">
+    <a href="/products" class="nav-logo font-display font-[800] tracking-tighter text-lg uppercase">SONOVA</a>
+    <div class="flex items-center gap-6">
+      <div class="hidden md:flex gap-6 uppercase tracking-widest text-[9px]">
+        <a href="#" class="opacity-40 hover:opacity-100 transition-opacity">Collection 01</a>
+        <a href="#" class="opacity-40 hover:opacity-100 transition-opacity">Archive</a>
+        <a href="#" class="opacity-40 hover:opacity-100 transition-opacity">Info</a>
+      </div>
+      <button id="cartBtn" class="relative p-1.5 hover:bg-white/10 rounded-full transition-colors">
+        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </nav>
+
+  <header class="relative z-10 pt-36 pb-12 px-6 md:px-10 max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+    <div class="reveal">
+      <span class="text-[9px] tracking-[0.5em] uppercase opacity-30 block mb-2">Retail Environment</span>
+      <h1 class="font-display text-4xl md:text-6xl tracking-tighter uppercase leading-[0.85]">COLLECTION 01<br><span class="text-transparent stroke-text">SYSTEM OUTLINE</span></h1>
+    </div>
+    <p class="max-w-xs text-xs opacity-40 leading-relaxed font-light tracking-wide reveal">
+      A modular framework built for technical utility and minimalist aesthetics. Engineered layers designed for frictionless transitions.
+    </p>
+  </header>
+
+  <section class="relative z-10 px-6 md:px-10 max-w-5xl mx-auto mb-8 reveal">
+    <div class="flex border-b border-white/10 pb-3 gap-6 text-[9px] uppercase tracking-widest overflow-x-auto">
+      <button id="filterAll" class="filter-btn active">All Objects</button>
+      <button id="filterTops" class="filter-btn">Tops</button>
+      <button id="filterAccessories" class="filter-btn">Accessories</button>
+    </div>
+  </section>
+
+  <main class="relative z-10 px-4 md:px-8 max-w-5xl mx-auto mb-24">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4" id="catalogGrid">
+      {products.map((item) => (
+        <div class="product-card-wrapper" data-category={item.category.toLowerCase()}>
+          <a href={`/${item.id}`} class="product-card block p-2 md:p-3 group">
+            <div class="aspect-[3/4] overflow-hidden bg-zinc-900 relative rounded-sm">
+              <img src={item.images[0]} class="product-image w-full h-full object-cover" alt={item.title}>
+              <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                <span class="text-[10px] uppercase tracking-widest font-bold border border-white/40 px-5 py-2.5 hover:bg-white hover:text-black transition-all">View Structure</span>
+              </div>
+            </div>
+            <div class="mt-3 flex justify-between items-start px-0.5">
+              <div>
+                <h4 class="font-medium uppercase tracking-wide text-white/90">{item.title}</h4>
+                <p class="text-[10px] opacity-30 uppercase tracking-wider mt-0.5">{item.category}</p>
+              </div>
+              <span class="opacity-40 font-light">{item.price}</span>
+            </div>
+          </a>
+        </div>
+      ))}
+    </div>
+  </main>
+
+  <footer class="relative z-10 border-t border-white/5 bg-zinc-950/20 backdrop-blur-md pt-16 pb-8 px-6 md:px-10 mt-auto">
+    <div class="max-w-5xl mx-auto mb-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div class="col-span-2 md:col-span-2">
+        <h4 class="font-display font-[800] tracking-tighter text-base uppercase mb-3">SONOVA</h4>
+        <p class="max-w-xs opacity-30 leading-relaxed">System architecture designed for high-performance minimalist integration.</p>
+      </div>
+      <div>
+        <h5 class="text-[8px] uppercase tracking-[0.3em] opacity-40 mb-3">Index</h5>
+        <ul class="space-y-1.5 opacity-50">
+          <li><a href="#" class="hover:opacity-100 transition-opacity">Shipping</a></li>
+          <li><a href="#" class="hover:opacity-100 transition-opacity">Returns</a></li>
+          <li><a href="#" class="hover:opacity-100 transition-opacity">Sizing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-[8px] uppercase tracking-[0.3em] opacity-40 mb-3">Connect</h5>
+        <ul class="space-y-1.5 opacity-50">
+          <li><a href="#" class="hover:opacity-100 transition-opacity">Instagram</a></li>
+          <li><a href="#" class="hover:opacity-100 transition-opacity">Twitter / X</a></li>
+          <li><a href="#" class="hover:opacity-100 transition-opacity">Discord</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="max-w-5xl mx-auto border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-3">
+      <span class="text-[9px] tracking-widest uppercase opacity-20">© 2026 SONOVA</span>
+      <span class="text-[9px] tracking-widest uppercase opacity-20">All rights reserved</span>
+    </div>
+  </footer>
+
+  <div id="crosshair"></div>
+</body>
+</html>
+
+<script>
+  // Pull styles automatically
+  import '../styles/global.css';
+
+  // ===== COSMIC BACKGROUND SYSTEM =====
+  const canvas = document.getElementById('galaxy-bg') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d');
+  const ch = document.getElementById('crosshair');
+  let currentWidth = window.innerWidth;
+  let currentHeight = window.innerHeight;
+
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    currentWidth = window.innerWidth;
+    currentHeight = window.innerHeight;
+    canvas.width = currentWidth * dpr;
+    canvas.height = currentHeight * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  class BackgroundDot {
+    x: number; y: number; color: string; size: number;
+    speedX: number; speedY: number; twinkleSpeed: number; alpha: number;
+
+    constructor(isTiny = false) {
+      this.x = Math.random() * currentWidth;
+      this.y = Math.random() * currentHeight;
+      const colors = ['#ffffff', '#a2d2ff', '#e8dbff', '#fdf0cd'];
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.size = isTiny ? Math.random() * 1 + 0.5 : Math.random() * 3 + 1;
+      this.speedX = (Math.random() - 0.5) * (isTiny ? 0.05 : 0.5);
+      this.speedY = (Math.random() - 0.5) * (isTiny ? 0.05 : 0.5);
+      this.twinkleSpeed = Math.random() * 0.002 + 0.003;
+      this.alpha = Math.random();
+    }
+    update() {
+      this.x += this.speedX; this.y += this.speedY;
+      if (this.x < 0) this.x = currentWidth;
+      if (this.x > currentWidth) this.x = 0;
+      if (this.y < 0) this.y = currentHeight;
+      if (this.y > currentHeight) this.y = 0;
+      this.alpha += this.twinkleSpeed;
+      if (this.alpha >= 1 || this.alpha <= 0.1) this.twinkleSpeed = -this.twinkleSpeed;
+    }
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0.1, Math.min(1, this.alpha));
+      ctx.shadowBlur = 10; ctx.shadowColor = this.color; ctx.fillStyle = this.color;
+      ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  const bgDots: BackgroundDot[] = [];
+  for (let i = 0; i < 24; i++) bgDots.push(new BackgroundDot(false));
+  for (let i = 0; i < 60; i++) bgDots.push(new BackgroundDot(true));
+
+  function animBg() {
+    ctx.clearRect(0, 0, currentWidth, currentHeight);
+    bgDots.forEach(d => { d.update(); d.draw(); });
+    requestAnimationFrame(animBg);
+  }
+  requestAnimationFrame(animBg);
+
+  // Crosshair Cursor Logic
+  window.addEventListener('mousemove', e => {
+    ch.style.left = (e.clientX - 10) + 'px';
+    ch.style.top = (e.clientY - 10) + 'px';
+    const hovering = e.target.closest('a, button');
+    ch.style.transform = hovering ? 'scale(2) rotate(45deg)' : 'scale(1) rotate(0deg)';
+  });
+  document.addEventListener('contextmenu', e => e.preventDefault());
+
+  // ===== FILTER ARCHITECTURE =====
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cardWrappers = document.querySelectorAll('.product-card-wrapper') as NodeListOf<HTMLElement>;
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.id.replace('filter', '').toLowerCase();
+      cardWrappers.forEach(card => {
+        if (filter === 'all' || card.dataset.category === filter) {
+          card.style.display = '';
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          requestAnimationFrame(() => {
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          });
+        } else {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(10px)';
+          setTimeout(() => { card.style.display = 'none'; }, 300);
+        }
+      });
+    });
+  });
+
+  // ===== SCROLL VISIBILITY REVEAL =====
+  const revealElements = document.querySelectorAll('.reveal, .product-card');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05 });
+
+  revealElements.forEach(el => revealObserver.observe(el));
+
+  // Initialize Lucide vector profiles
+  if ((window as any).lucide) {
+    (window as any).lucide.createIcons();
+  }
+</script>
