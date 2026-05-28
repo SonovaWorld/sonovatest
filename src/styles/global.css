@@ -1,0 +1,278 @@
+/* ===== BASE ===== */
+body {
+  background: radial-gradient(circle at 50% 50%, #151515 0%, #000000 100%);
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+img {
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* ===== GALAXY CANVAS ===== */
+#galaxy-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: -1;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* ===== WARP BUBBLE ===== */
+#warp-bubble-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: #ffffff;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  display: none;
+  mask-image: radial-gradient(circle, transparent 0%, black 0%);
+  -webkit-mask-image: radial-gradient(circle, transparent 0%, black 0%);
+}
+.bubble-expanding {
+  display: block !important;
+  animation: flashFade 0.6s cubic-bezier(0.1,0.8,0.3,1) forwards,
+             maskExpand 0.9s cubic-bezier(0.15,1,0.2,1) forwards;
+}
+@keyframes flashFade {
+  0% { opacity: 1; }
+  40% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes maskExpand {
+  0% {
+    mask-image: radial-gradient(circle, transparent 0%, black 0%);
+    -webkit-mask-image: radial-gradient(circle, transparent 0%, black 0%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  100% {
+    mask-image: radial-gradient(circle, transparent 150%, black 150%);
+    -webkit-mask-image: radial-gradient(circle, transparent 150%, black 150%);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+}
+
+/* ===== CROSSHAIR ===== */
+#crosshair {
+  position: fixed;
+  width: 20px; height: 20px;
+  pointer-events: none;
+  z-index: 9998;
+  mix-blend-mode: difference;
+  transition: transform 0.2s ease-out;
+  display: none;
+  top: 0; left: 0;
+}
+#crosshair::before { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #fff; }
+#crosshair::after { content: ''; position: absolute; left: 50%; top: 0; width: 1px; height: 100%; background: #fff; }
+@media (min-width: 768px) {
+  body, a, button { cursor: none !important; }
+  #crosshair { display: block; }
+}
+
+/* ===== PRODUCT CARDS ===== */
+.product-card {
+  background: rgba(255,255,255,0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.5s cubic-bezier(0.2,1,0.3,1);
+  text-decoration: none;
+  color: #fff;
+}
+@media (min-width: 768px) {
+  .product-card:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+  }
+}
+
+.product-image {
+  filter: grayscale(0.5) brightness(0.8);
+  transition: 0.8s cubic-bezier(0.2,1,0.3,1);
+}
+.product-card:hover .product-image {
+  filter: grayscale(0) brightness(1);
+  transform: scale(1.03);
+}
+
+.price-tag {
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+}
+
+/* ===== HERO SLIDER ===== */
+.hero-slide-img {
+  filter: grayscale(0.3) brightness(0.4);
+  transition: 3s ease-out;
+}
+.hero-slide.active .hero-slide-img {
+  filter: grayscale(0) brightness(0.5);
+  transform: scale(1.05);
+}
+
+.hero-fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s cubic-bezier(0.2,1,0.3,1), transform 0.8s cubic-bezier(0.2,1,0.3,1);
+}
+.hero-slide.active .hero-fade-up {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero Dots */
+.hero-dot {
+  width: 32px; height: 2px;
+  background: rgba(255,255,255,0.2);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.hero-dot::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 0; height: 100%;
+  background: #fff;
+  transition: width 0s;
+}
+.hero-dot.active::after {
+  width: 100%;
+  transition-duration: 5s;
+}
+
+/* ===== MARQUEE ===== */
+.marquee-track {
+  animation: marqueeScroll 20s linear infinite;
+}
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ===== CAROUSEL ===== */
+.product-carousel {
+  transition: transform 0.5s cubic-bezier(0.25,1,0.3,1);
+}
+
+/* ===== FILTER BTNS ===== */
+.filter-btn {
+  background: transparent;
+  color: #fff;
+}
+.filter-btn.active {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+/* ===== SCROLL REVEAL ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.2,1,0.3,1), transform 0.8s cubic-bezier(0.2,1,0.3,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== SIZE OPTION ===== */
+.size-option {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  background: transparent;
+  color: #fff;
+}
+.size-option:hover {
+  border-color: rgba(255,255,255,0.5);
+}
+.size-option.selected {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+/* ===== COLOR SWATCH ===== */
+.color-swatch {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.color-swatch:hover,
+.color-swatch.selected {
+  border-color: #fff;
+  transform: scale(1.1);
+}
+.color-swatch.selected::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #fff;
+  text-shadow: 0 0 3px rgba(0,0,0,0.8);
+}
+
+/* ===== THUMBNAIL ===== */
+.thumb-item {
+  aspect-ratio: 3/4;
+  width: 72px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  opacity: 0.4;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.thumb-item:hover {
+  opacity: 0.7;
+}
+.thumb-item.active {
+  opacity: 1;
+  border-color: rgba(255,255,255,0.4);
+}
+.thumb-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.3) brightness(0.8);
+}
+.thumb-item.active img {
+  filter: grayscale(0) brightness(1);
+}
+
+/* ===== ACCORDION ===== */
+.accordion-icon.rotated {
+  transform: rotate(45deg);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 767px) {
+  #crosshair { display: none !important; }
+  body, a, button { cursor: auto !important; }
+}

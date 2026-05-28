@@ -1,0 +1,357 @@
+---
+import products from '../data/products.json';
+
+export async function getStaticPaths() {
+  return products.map((product) => ({
+    params: { id: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{product.title} — SONOVA</title>
+  
+  <script src="https://cdn.tailwindcss.com" is:inline></script>
+  <script src="https://unpkg.com/lucide@latest" is:inline></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@800&display=swap" rel="stylesheet">
+  
+  <script is:inline>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body: ['Space Grotesk', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-body text-xs">
+  <div id="warp-bubble-overlay"></div>
+  <canvas id="galaxy-bg"></canvas>
+
+  <nav class="fixed top-0 left-0 w-full px-6 md:px-10 py-4 flex justify-between items-center z-50 bg-black/10 backdrop-blur-sm">
+    <a href="/index.html" class="nav-logo font-display font-[800] tracking-tighter text-lg uppercase">SONOVA</a>
+    <div class="flex items-center gap-4">
+      <button id="backBtn" class="flex items-center gap-1.5 text-[9px] uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+        <span>Back</span>
+      </button>
+      <button id="cartBtn2" class="relative p-1.5 hover:bg-white/10 rounded-full transition-colors">
+        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </nav>
+
+  <main class="relative z-10 pt-20 pb-16 px-4 md:px-8">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+        <div class="space-y-2">
+          <div class="aspect-[3/4] overflow-hidden bg-zinc-900 relative rounded-sm" id="mainGallery">
+            <img id="mainImage" src={product.images[0]} class="w-full h-full object-cover transition-opacity duration-500" alt={product.title}>
+            <button id="galPrev" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 backdrop-blur-sm border border-white/10 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all opacity-60">
+              <i data-lucide="chevron-left" class="w-4 h-4"></i>
+            </button>
+            <button id="galNext" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 backdrop-blur-sm border border-white/10 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all opacity-60">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+            <div class="absolute bottom-2 right-2 text-[9px] bg-black/60 backdrop-blur-sm px-2.5 py-0.5 rounded-full">
+              <span id="imgCounter">1 / {product.images.length}</span>
+            </div>
+          </div>
+          
+          <div class="flex gap-1.5 overflow-x-auto pb-1" id="thumbStrip">
+            {product.images.map((img, i) => (
+              <div class={`thumb-item ${i === 0 ? 'active' : ''}`} data-index={i}>
+                <img src={img} alt={`${product.title} ${i + 1}`} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-center pt-2">
+          <span class="text-[9px] tracking-[0.5em] uppercase opacity-30 mb-2" id="productCategory">{product.category}</span>
+          <h1 class="font-display text-3xl md:text-4xl tracking-tighter uppercase leading-none" id="productTitle">{product.title}</h1>
+          <p class="mt-1 text-base font-light opacity-40 tracking-wide" id="productPrice">{product.price}</p>
+
+          <div class="mt-6 border-t border-white/10 pt-6 space-y-5">
+            <div>
+              <span class="text-[8px] uppercase tracking-[0.3em] opacity-40 block mb-2">Color — <span id="colorName" class="text-white/70">{product.colors[0].name}</span></span>
+              <div class="flex gap-2.5" id="colorOptions">
+                {product.colors.map((color, i) => (
+                  <div 
+                    class={`color-swatch ${i === 0 ? 'selected' : ''}`} 
+                    style={`background: ${color.hex}`} 
+                    title={color.name}
+                    data-index={i}
+                    data-name={color.name}
+                  ></div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-[8px] uppercase tracking-[0.3em] opacity-40">Size</span>
+                <a href="#" class="text-[8px] uppercase tracking-[0.3em] opacity-40 underline hover:opacity-100 transition-opacity">Size Guide</a>
+              </div>
+              <div class="flex flex-wrap gap-1.5" id="sizeOptions">
+                {product.sizes.map((size, i) => (
+                  <button class={`size-option ${i === 0 ? 'selected' : ''}`} data-index={i}>{size}</button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <span class="text-[8px] uppercase tracking-[0.3em] opacity-40 block mb-2">Quantity</span>
+              <div class="flex items-center border border-white/10 w-fit">
+                <button id="qtyMinus" class="w-8 h-8 flex items-center justify-center hover:bg-white/10 transition-colors">
+                  <i data-lucide="minus" class="w-2.5 h-2.5"></i>
+                </button>
+                <span id="qtyValue" class="w-8 h-8 flex items-center justify-center text-xs">1</span>
+                <button id="qtyPlus" class="w-8 h-8 flex items-center justify-center hover:bg-white/10 transition-colors">
+                  <i data-lucide="plus" class="w-2.5 h-2.5"></i>
+                </button>
+              </div>
+            </div>
+            <button id="addToCartBtn" class="w-full py-3 bg-white text-black font-bold text-[10px] uppercase tracking-widest hover:bg-transparent hover:text-white border border-white transition-all duration-300 flex items-center justify-center gap-2.5 group">
+              <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+              <span>Add to Cart</span>
+            </button>
+            <div id="addedAlert" class="hidden text-center py-2 text-[9px] uppercase tracking-widest bg-green-500/10 border border-green-500/20 text-green-400">
+              Added to cart ✓
+            </div>
+          </div>
+
+          <div class="mt-8 border-t border-white/10 pt-4">
+            <div class="accordion-item border-b border-white/10">
+              <button class="accordion-toggle w-full py-3 flex justify-between items-center text-left" data-accordion="desc">
+                <span class="text-[9px] uppercase tracking-[0.3em]">Description</span>
+                <i data-lucide="plus" class="w-3.5 h-3.5 opacity-40 accordion-icon transition-transform duration-300"></i>
+              </button>
+              <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
+                <p class="text-xs opacity-40 leading-relaxed pb-3" id="productDesc">{product.description}</p>
+              </div>
+            </div>
+            <div class="accordion-item border-b border-white/10">
+              <button class="accordion-toggle w-full py-3 flex justify-between items-center text-left" data-accordion="materials">
+                <span class="text-[9px] uppercase tracking-[0.3em]">Materials & Care</span>
+                <i data-lucide="plus" class="w-3.5 h-3.5 opacity-40 accordion-icon transition-transform duration-300"></i>
+              </button>
+              <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
+                <p class="text-xs opacity-40 leading-relaxed pb-3" id="productMaterials">{product.materials}</p>
+              </div>
+            </div>
+            <div class="accordion-item border-b border-white/10">
+              <button class="accordion-toggle w-full py-3 flex justify-between items-center text-left" data-accordion="shipping">
+                <span class="text-[9px] uppercase tracking-[0.3em]">Shipping</span>
+                <i data-lucide="plus" class="w-3.5 h-3.5 opacity-40 accordion-icon transition-transform duration-300"></i>
+              </button>
+              <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
+                <div class="text-xs opacity-40 leading-relaxed pb-3 space-y-1">
+                  <p>Free standard shipping on orders over S$100.</p>
+                  <p>Singapore: 2–3 business days.</p>
+                  <p>International: 7–14 business days.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="crosshair"></div>
+
+  <script define:vars={{ productImages: product.images }}></script>
+</body>
+</html>
+
+<script>
+  // Import stylesheet directly inside client bundle processing
+  import '../styles/global.css';
+
+  // ===== GALAXY BACKGROUND =====
+  const canvas = document.getElementById('galaxy-bg');
+  const ctx = canvas.getContext('2d');
+  const ch = document.getElementById('crosshair');
+  let currentWidth = window.innerWidth;
+  let currentHeight = window.innerHeight;
+
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    currentWidth = window.innerWidth;
+    currentHeight = window.innerHeight;
+    canvas.width = currentWidth * dpr;
+    canvas.height = currentHeight * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  class BackgroundDot {
+    constructor(isTiny = false) {
+      this.x = Math.random() * currentWidth;
+      this.y = Math.random() * currentHeight;
+      const colors = ['#ffffff', '#a2d2ff', '#e8dbff', '#fdf0cd'];
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.size = isTiny ? Math.random() * 1 + 0.5 : Math.random() * 3 + 1;
+      this.speedX = (Math.random() - 0.5) * (isTiny ? 0.05 : 0.5);
+      this.speedY = (Math.random() - 0.5) * (isTiny ? 0.05 : 0.5);
+      this.twinkleSpeed = Math.random() * 0.002 + 0.003;
+      this.alpha = Math.random();
+    }
+    update() {
+      this.x += this.speedX; this.y += this.speedY;
+      if (this.x < 0) this.x = currentWidth;
+      if (this.x > currentWidth) this.x = 0;
+      if (this.y < 0) this.y = currentHeight;
+      if (this.y > currentHeight) this.y = 0;
+      this.alpha += this.twinkleSpeed;
+      if (this.alpha >= 1 || this.alpha <= 0.1) this.twinkleSpeed = -this.twinkleSpeed;
+    }
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0.1, Math.min(1, this.alpha));
+      ctx.shadowBlur = 10; ctx.shadowColor = this.color; ctx.fillStyle = this.color;
+      ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  const bgDots = [];
+  for (let i = 0; i < 24; i++) bgDots.push(new BackgroundDot(false));
+  for (let i = 0; i < 60; i++) bgDots.push(new BackgroundDot(true));
+
+  function animBg() {
+    ctx.clearRect(0, 0, currentWidth, currentHeight);
+    bgDots.forEach(d => { d.update(); d.draw(); });
+    requestAnimationFrame(animBg);
+  }
+  requestAnimationFrame(animBg);
+
+  // Crosshair
+  window.addEventListener('mousemove', e => {
+    ch.style.left = (e.clientX - 10) + 'px';
+    ch.style.top = (e.clientY - 10) + 'px';
+    const hovering = e.target.closest('a, button');
+    ch.style.transform = hovering ? 'scale(2) rotate(45deg)' : 'scale(1) rotate(0deg)';
+  });
+  document.addEventListener('contextmenu', e => e.preventDefault());
+
+  // ===== INTERACTIVE MANAGEMENT =====
+  const mainImage = document.getElementById('mainImage');
+  const imgCounter = document.getElementById('imgCounter');
+  const thumbItems = document.querySelectorAll('.thumb-item');
+  const colorNameDisplay = document.getElementById('colorName');
+  
+  let currentImgIndex = 0;
+  let quantity = 1;
+
+  // Retrieve asset references directly from client scope interface
+  const images = [...thumbItems].map(item => item.querySelector('img').src);
+
+  function goToImage(index) {
+    if(images.length === 0) return;
+    currentImgIndex = index;
+    mainImage.style.opacity = '0';
+    setTimeout(() => {
+      mainImage.src = images[index];
+      mainImage.style.opacity = '1';
+    }, 250);
+    imgCounter.textContent = `${index + 1} / ${images.length}`;
+    thumbItems.forEach((t, i) => t.classList.toggle('active', i === index));
+  }
+
+  // Gallery listeners
+  thumbItems.forEach((thumb, i) => {
+    thumb.addEventListener('click', () => goToImage(i));
+  });
+
+  document.getElementById('galPrev').addEventListener('click', () => {
+    goToImage((currentImgIndex - 1 + images.length) % images.length);
+  });
+  document.getElementById('galNext').addEventListener('click', () => {
+    goToImage((currentImgIndex + 1) % images.length);
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') goToImage((currentImgIndex - 1 + images.length) % images.length);
+    if (e.key === 'ArrowRight') goToImage((currentImgIndex + 1) % images.length);
+  });
+
+  // Swatches
+  document.querySelectorAll('.color-swatch').forEach(swatch => {
+    swatch.addEventListener('click', (e) => {
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+      swatch.classList.add('selected');
+      colorNameDisplay.textContent = swatch.getAttribute('data-name');
+    });
+  });
+
+  // Sizes
+  document.querySelectorAll('.size-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.size-option').forEach(s => s.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+
+  // Quantity
+  const qtyValue = document.getElementById('qtyValue');
+  document.getElementById('qtyMinus').addEventListener('click', () => {
+    if (quantity > 1) { quantity--; qtyValue.textContent = quantity; }
+  });
+  document.getElementById('qtyPlus').addEventListener('click', () => {
+    if (quantity < 10) { quantity++; qtyValue.textContent = quantity; }
+  });
+
+  // Cart Alert
+  document.getElementById('addToCartBtn').addEventListener('click', () => {
+    const btn = document.getElementById('addToCartBtn');
+    const alert = document.getElementById('addedAlert');
+    btn.style.opacity = '0.5';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.style.opacity = '1';
+      btn.disabled = false;
+      alert.classList.remove('hidden');
+      setTimeout(() => alert.classList.add('hidden'), 2500);
+    }, 600);
+  });
+
+  // Back navigation
+  document.getElementById('backBtn').addEventListener('click', () => {
+    window.location.href = '/index.html';
+  });
+
+  // Accordion Toggles
+  document.querySelectorAll('.accordion-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const content = toggle.nextElementSibling;
+      const icon = toggle.querySelector('.accordion-icon');
+      const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+
+      document.querySelectorAll('.accordion-content').forEach(c => { c.style.maxHeight = '0px'; });
+      document.querySelectorAll('.accordion-icon').forEach(i => i.classList.remove('rotated'));
+
+      if (!isOpen) {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        icon.classList.add('rotated');
+      }
+    });
+  });
+
+  // Initialize Lucide icons on layout mount
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+</script>

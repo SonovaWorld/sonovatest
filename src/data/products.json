@@ -1,0 +1,59 @@
+[
+  {
+    "id": "chrome-tee",
+    "title": "Chrome Tee",
+    "category": "Tops",
+    "price": "S$45.00",
+    "sizes": ["XS", "S", "M", "L", "XL"],
+    "colors": [
+      { "name": "Oat", "hex": "#c2b9a5" },
+      { "name": "Black", "hex": "#1a1a1a" },
+      { "name": "White", "hex": "#e8e8e8" }
+    ],
+    "images": [
+      "https://picsum.photos/id/101/640/853",
+      "https://picsum.photos/id/102/640/853",
+      "https://picsum.photos/id/103/640/853"
+    ],
+    "description": "A definitive heavy-weight essential. The Chrome Tee is cut from 280GSM long-staple cotton with a peach-skin finish that softens with each wash. Features anti-odor silver-ion treatment, a boxy silhouette, and dropped shoulders for an architectural drape.",
+    "materials": "100% long-staple cotton (280GSM). Peach-skin enzyme wash. Silver-ion anti-odor finish. Ribbed crew neck with reinforced taping. Double-needle hem and cuffs. Machine wash cold. Tumble dry low. Do not bleach. Iron low if needed."
+  },
+  {
+    "id": "ind-hoodie",
+    "title": "Ind Hoodie",
+    "category": "Tops",
+    "price": "S$85.00",
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "colors": [
+      { "name": "Charcoal", "hex": "#2d2d2d" },
+      { "name": "Olive", "hex": "#4a5237" },
+      { "name": "Slate", "hex": "#6b7280" }
+    ],
+    "images": [
+      "https://picsum.photos/id/201/640/853",
+      "https://picsum.photos/id/202/640/853",
+      "https://picsum.photos/id/203/640/853"
+    ],
+    "description": "The Ind Hoodie represents tactical comfort. Constructed from 400GSM French terry with a Yukon fleece lining, it provides thermal regulation across variable conditions. Features a triple-panel hood, kangaroo pocket with hidden zip enclosure, and rear embossed silicone label.",
+    "materials": "100% French terry cotton (400GSM). Yukon fleece lining. Triple-panel hood with woven drawcord. Kangaroo pocket with YKK® zip enclosure. Embossed silicone label at back. Ribbed cuffs and hem. Machine wash cold inside out. Tumble dry low. Do not iron print area."
+  },
+  {
+    "id": "nylon-cap",
+    "title": "Nylon Cap",
+    "category": "Accessories",
+    "price": "S$35.00",
+    "sizes": ["One Size"],
+    "colors": [
+      { "name": "Black", "hex": "#111111" },
+      { "name": "Navy", "hex": "#1e2856" },
+      { "name": "Coyote", "hex": "#8b7355" }
+    ],
+    "images": [
+      "https://picsum.photos/id/301/640/853",
+      "https://picsum.photos/id/302/640/853",
+      "https://picsum.photos/id/303/640/853"
+    ],
+    "description": "Engineered for the field. The Nylon Cap features a ripstop nylon shell with laser-cut rear perforation for airflow. Quick-dry sweatband, pre-curved brim, and adjustable snapback closure. Structured six-panel construction maintains shape through extended use.",
+    "materials": "Ripstop nylon shell (210D). Laser-cut rear perforation. Quick-dry polyester sweatband. Structured six-panel construction. Pre-curved brim with reinforced stitching. Adjustable snapback closure. Spot clean. Do not machine wash or tumble dry. Store flat."
+  }
+]
